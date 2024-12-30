@@ -508,6 +508,7 @@ impl YTAStatus {
         } else if line.starts_with("Livestream has ended and is being processed")
             || line.contains("use yt-dlp to download it.")
         {
+            
             self.state = YTAState::Ended;
         } else if line.starts_with("Final file: ") {
             self.state = YTAState::Finished;
