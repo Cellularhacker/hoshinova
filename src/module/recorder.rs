@@ -503,7 +503,7 @@ impl YTAStatus {
             self.state = YTAState::Waiting(None);
         } else if line.starts_with("Muxing final file") {
             self.state = YTAState::Muxing;
-        } else if line.starts_with("Livestream has been processed") {
+        } else if line.starts_with("Livestream has been processed") || line.contains("Use yt-dlp instead") {
             self.state = YTAState::AlreadyProcessed;
         } else if line.starts_with("Livestream has ended and is being processed")
             || line.contains("use yt-dlp to download it.")
