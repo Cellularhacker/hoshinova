@@ -389,7 +389,7 @@ pub struct YTAStatus {
     total_size: Option<String>,
     video_quality: Option<String>,
     output_file: Option<String>,
-    is_finished: bool,
+    is_finished: false,
 }
 
 #[derive(Debug, Clone, PartialEq, TS, Serialize)]
@@ -453,7 +453,7 @@ impl YTAStatus {
         self.last_output = Some(line.to_string());
         self.last_update = chrono::Utc::now();
 
-        if(self.is_finished) {
+        if self.is_finished {
             return;
         }
         if line.starts_with("Video Fragments: ") {
