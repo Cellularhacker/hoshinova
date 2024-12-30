@@ -389,6 +389,7 @@ pub struct YTAStatus {
     total_size: Option<String>,
     video_quality: Option<String>,
     output_file: Option<String>,
+    is_finished: bool,
 }
 
 #[derive(Debug, Clone, PartialEq, TS, Serialize)]
@@ -452,6 +453,9 @@ impl YTAStatus {
         self.last_output = Some(line.to_string());
         self.last_update = chrono::Utc::now();
 
+        if(self.is_finished) {
+            return;
+        }
         if line.starts_with("Video Fragments: ") {
             self.state = YTAState::Recording;
             let mut parts = line.split(';').map(|s| s.split(':').nth(1).unwrap_or(""));
@@ -508,10 +512,10 @@ impl YTAStatus {
         } else if line.starts_with("Livestream has ended and is being processed")
             || line.contains("use yt-dlp to download it.")
         {
-            
             self.state = YTAState::Ended;
         } else if line.starts_with("Final file: ") {
             self.state = YTAState::Finished;
+            self.is_finished = true;
             self.output_file = Some(strip_ansi(&line[12..]));
         } else if line.contains("User Interrupt") {
             self.state = YTAState::Interrupted;
